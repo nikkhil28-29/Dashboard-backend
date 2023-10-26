@@ -5,15 +5,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 
+from account.renderers import MyUserRenderers
+
 # Create your views here.
 class MyUserRegistrationView(APIView):
+    renderer_classes=[MyUserRenderers]
+
     def post(self,request,format=None):
         serializer=MyUserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):   #is_valid wil call validate functiom from serializer.py
             user=serializer.save()
             return Response({'msg':'Registration Success'},
             status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST )
     
 
